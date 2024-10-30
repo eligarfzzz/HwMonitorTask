@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace HwMonitorTask
 {
@@ -8,24 +9,37 @@ namespace HwMonitorTask
         {
             InitializeComponent();
 
-            var cpuNotifyIcon = new NotifyIcon(notifyIconsContainer);
-            cpuNotifyIcon.Text = "CPU";
-            cpuNotifyIcon.Visible = true;
-            cpuNotifyIcon.Icon = this.Icon;
-            notifyIcons.Add(cpuNotifyIcon);
-
-
-            var gpuNotifyIcon = new NotifyIcon(notifyIconsContainer);
-            gpuNotifyIcon.Text = "GPU";
-            gpuNotifyIcon.Visible = true;
-            gpuNotifyIcon.Icon = this.Icon;
-            notifyIcons.Add(gpuNotifyIcon);
-
-            HardwareMonitor.Update();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
-        private  System.ComponentModel.IContainer notifyIconsContainer = new System.ComponentModel.Container();
-        private List<NotifyIcon> notifyIcons = new List<NotifyIcon>();
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            var hardwares = hardwareMonitor.Update();
+
+            foreach (var item in hardwares)
+            {
+                NotifyIcon icon;
+                if (notifyIcons.ContainsKey(item.Id))
+                {
+                    icon = notifyIcons[item.Id];
+                }
+                else
+                {
+                    icon = new NotifyIcon(notifyIconsContainer);
+                    notifyIcons[item.Id] = icon;
+                }
+                icon.Text = $"{item.Name} {item.Rate}%, {item.Temperature}°„C";
+                icon.Visible = true;
+                icon.Icon = this.Icon;
+            }
+        }
+
+        private System.ComponentModel.IContainer notifyIconsContainer = new System.ComponentModel.Container();
+        private HardwareMonitor hardwareMonitor = new HardwareMonitor();
+        private DispatcherTimer timer = new DispatcherTimer();
+        private Dictionary<string, NotifyIcon> notifyIcons = new Dictionary<string, NotifyIcon>();
 
     }
 }

@@ -9,10 +9,13 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
     <UseWPF>True</UseWPF>
     <StartupObject></StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.3" />
+    <Reference Include="LibreHardwareMonitorLib">
+      <HintPath>LibreHardwareMonitorLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
