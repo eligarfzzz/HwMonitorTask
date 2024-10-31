@@ -8,7 +8,7 @@ namespace HwMonitorTask
         public Form1()
         {
             InitializeComponent();
-
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -32,7 +32,18 @@ namespace HwMonitorTask
                 }
                 icon.Text = $"{item.Name} {item.Rate}%, {item.Temperature}°„C";
                 icon.Visible = true;
-                icon.Icon = this.Icon;
+
+                var h = new HardwareWidget();
+                h.Rate = item.Rate ?? 0;
+                if (item.Temperature.HasValue)
+                {
+                    h.Temperature = item.Temperature.Value;
+                }
+                using Bitmap bitmap = new Bitmap(h.Width, h.Height);
+                h.DrawToBitmap(bitmap, new Rectangle(0, 0, h.Width, h.Height));
+                IntPtr Hicon = bitmap.GetHicon();
+                Icon newIcon = Icon.FromHandle(Hicon);
+                icon.Icon = newIcon;
             }
         }
 
