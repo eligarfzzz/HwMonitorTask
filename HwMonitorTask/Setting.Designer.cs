@@ -1,6 +1,6 @@
 ﻿namespace HwMonitorTask
 {
-    partial class Form1
+    partial class Setting
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,12 +30,12 @@
         {
             SuspendLayout();
             // 
-            // Form1
+            // Setting
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Name = "Form1";
+            ClientSize = new Size(279, 450);
+            Name = "Setting";
             Text = "Form1";
             ResumeLayout(false);
         }

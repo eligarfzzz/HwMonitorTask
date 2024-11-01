@@ -1,17 +1,30 @@
+using Microsoft.Win32;
+using System.ComponentModel;
+using System.Timers;
 using System.Windows.Forms;
-using System.Windows.Threading;
 
 namespace HwMonitorTask
 {
-    public partial class Form1 : Form
+    public partial class Setting : Form
     {
-        public Form1()
+        public Setting()
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = 1000;
             timer.Tick += Timer_Tick;
             timer.Start();
+
+            this.Opacity = 0;
+            this.ShowInTaskbar = false;
+            SizeChanged += (s, e) =>
+            {
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    this.Opacity = 0;
+                    this.ShowInTaskbar = false;
+                }
+            };
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -29,6 +42,12 @@ namespace HwMonitorTask
                 {
                     icon = new NotifyIcon(notifyIconsContainer);
                     notifyIcons[item.Id] = icon;
+                    icon.Click += (s, e) =>
+                    {
+                        this.ShowInTaskbar = true;
+                        this.Opacity = 1;
+                        this.WindowState = FormWindowState.Normal;
+                    };
                 }
                 icon.Text = $"{item.Name} {item.Rate}%, {item.Temperature}°„C";
                 icon.Visible = true;
@@ -49,8 +68,19 @@ namespace HwMonitorTask
 
         private System.ComponentModel.IContainer notifyIconsContainer = new System.ComponentModel.Container();
         private HardwareMonitor hardwareMonitor = new HardwareMonitor();
-        private DispatcherTimer timer = new DispatcherTimer();
+        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private Dictionary<string, NotifyIcon> notifyIcons = new Dictionary<string, NotifyIcon>();
 
+        //private void SetStartup()
+        //{
+        //    RegistryKey rk = Registry.CurrentUser.OpenSubKey
+        //        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+        //    if (chkStartUp.Checked)
+        //        rk.SetValue(AppName, Application.ExecutablePath);
+        //    else
+        //        rk.DeleteValue(AppName, false);
+
+        //}
     }
 }
