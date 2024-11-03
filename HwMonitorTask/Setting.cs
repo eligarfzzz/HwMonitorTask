@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -11,7 +12,7 @@ namespace HwMonitorTask
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            timer.Interval = 1000;
+            timer.Interval = 500;
             timer.Tick += Timer_Tick;
             timer.Start();
 
@@ -76,6 +77,7 @@ namespace HwMonitorTask
                 IntPtr Hicon = bitmap.GetHicon();
                 Icon newIcon = Icon.FromHandle(Hicon);
                 icon.Icon = newIcon;
+                DestroyIcon(newIcon.Handle);
             }
         }
 
@@ -106,5 +108,9 @@ namespace HwMonitorTask
             }
 
         }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto)]
+        extern static bool DestroyIcon(IntPtr handle);
+
     }
 }
