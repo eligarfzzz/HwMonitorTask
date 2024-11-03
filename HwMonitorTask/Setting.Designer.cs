@@ -28,18 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Setting));
+            checkBox_startUp = new CheckBox();
             SuspendLayout();
+            // 
+            // checkBox_startUp
+            // 
+            checkBox_startUp.AutoSize = true;
+            checkBox_startUp.Location = new Point(12, 12);
+            checkBox_startUp.Name = "checkBox_startUp";
+            checkBox_startUp.Size = new Size(176, 24);
+            checkBox_startUp.TabIndex = 0;
+            checkBox_startUp.Text = "With system startup";
+            checkBox_startUp.UseVisualStyleBackColor = true;
             // 
             // Setting
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(279, 450);
+            ClientSize = new Size(216, 48);
+            Controls.Add(checkBox_startUp);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Setting";
             Text = "Form1";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private CheckBox checkBox_startUp;
     }
 }

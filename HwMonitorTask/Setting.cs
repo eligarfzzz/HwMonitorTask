@@ -25,6 +25,19 @@ namespace HwMonitorTask
                     this.ShowInTaskbar = false;
                 }
             };
+
+            checkBox_startUp.Checked = IsStartup();
+            checkBox_startUp.CheckedChanged += (s, e) =>
+            {
+                try
+                {
+                    SetStartup(checkBox_startUp.Checked);
+                }
+                catch (Exception)
+                {
+
+                }
+            };
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -71,16 +84,27 @@ namespace HwMonitorTask
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
         private Dictionary<string, NotifyIcon> notifyIcons = new Dictionary<string, NotifyIcon>();
 
-        //private void SetStartup()
-        //{
-        //    RegistryKey rk = Registry.CurrentUser.OpenSubKey
-        //        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        private bool IsStartup()
+        {
+            RegistryKey? rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            return rk?.GetValue(Application.ProductName) != null;
+        }
 
-        //    if (chkStartUp.Checked)
-        //        rk.SetValue(AppName, Application.ExecutablePath);
-        //    else
-        //        rk.DeleteValue(AppName, false);
+        private void SetStartup(bool startup)
+        {
 
-        //}
+            RegistryKey? rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (startup)
+            {
+                rk?.SetValue(Application.ProductName, Application.ExecutablePath);
+            }
+            else
+            {
+                rk?.DeleteValue(Application.ProductName ?? "", false);
+            }
+
+        }
     }
 }

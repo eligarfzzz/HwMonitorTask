@@ -10,7 +10,12 @@
     <UseWPF>True</UseWPF>
     <StartupObject></StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="app.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="LibreHardwareMonitorLib">
